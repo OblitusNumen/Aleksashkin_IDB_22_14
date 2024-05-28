@@ -11,14 +11,16 @@ public class BehaviourScript : MonoBehaviour
     float maxPos = 1.164f;
     float minPos = 1.057f;
     bool up = false;
-    bool moving = true;
+    bool moving = false;
     float speed = .05f;
     float rotationSpd = 100f;
     private Text loadedText;
+    private Vector3 pos;
 
     void Start()
     {
         LoadJson();
+        pos = rotatable.transform.position;
     }
 
     // Update is called once per frame
@@ -49,13 +51,11 @@ public class BehaviourScript : MonoBehaviour
 
     public void LoadJson()
     {
-            Debug.LogError("JSON file loading");
         TextAsset jsonFile = Resources.Load<TextAsset>("text");
 
         if (jsonFile != null)
         {
             string jsonText = jsonFile.text;
-            // Äåñåðèàëèçàöèÿ â äèíàìè÷åñêèé îáúåêò
             loadedText = JsonConvert.DeserializeObject<Text>(jsonText);
         }
         else
@@ -63,5 +63,20 @@ public class BehaviourScript : MonoBehaviour
             Debug.LogError("JSON file is absent!");
             loadedText = new Text();
         }
+    }
+
+    public void startInteract()
+    {
+        moving = true;
+    }
+
+    public void finishInteract()
+    {
+        moving = false;
+    }
+
+    public void interactUpdate()
+    {
+        rotatable.transform.position = pos;
     }
 }
